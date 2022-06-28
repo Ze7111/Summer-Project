@@ -1,3 +1,4 @@
+# ---------------------- L O A D   L I B A R I E S / F I L E S ---------------------------------- 
 try:
     from tkinter import *
     import time, random, threading
@@ -8,7 +9,7 @@ try:
     from modules.fileviewer import FileWinodow as explorer
 except:
     print("FAILED TO LOAD CORRECTLY")
-
+# ---------------------- I N A T I L I Z E ---------------------------------- 
 def __init__():
 # ---------------------- W I N D O W   C R E A T I O N ---------------------------------- 
     root = Tk()
@@ -30,6 +31,7 @@ def __init__():
     subHeadding.grid()
 
 # ---------------------- B U T T O N   F U N C T I O N S ---------------------------------- 
+    # ---------------------- R E F R E S H    B U T T O N   F U N C T I O N S ---------------------------------- 
     class refreshbuttonfunc():
         def refreshbtt():
             th = threading.Thread(target=refreshbuttonfunc.refreshsub)
@@ -51,7 +53,7 @@ def __init__():
             total = str(total)
             time.sleep(2)
             subHeadding.configure(text = total+" Files Scanned") # update the sub heading
-        
+    # ---------------------- C O M P   B U T T O N   F U N C T I O N S ----------------------------------     
     class compbuttonfunc():
         def compwindow():
             th = threading.Thread(target=compbuttonfunc.destroy)
@@ -62,7 +64,7 @@ def __init__():
             time.sleep(0.5)
             root.destroy()
         
-        
+    # ---------------------- M A T H   B U T T O N   F U N C T I O N S ----------------------------------     
     class mathbuttonfunc():
         def mathwindow():
             th = threading.Thread(target=compbuttonfunc.destroy)
@@ -72,7 +74,7 @@ def __init__():
         def destroy():
             time.sleep(0.5)
             root.destroy()
-        
+    # ---------------------- P H Y S I C S   B U T T O N   F U N C T I O N S ----------------------------------     
     class physicsbuttonfunc():
         def physicswindow():
             th = threading.Thread(target=compbuttonfunc.destroy)
@@ -83,7 +85,7 @@ def __init__():
             time.sleep(0.5)
             root.destroy()
         
-        
+    # ---------------------- G D    B U T T O N   F U N C T I O N S ----------------------------------     
     class gamedesignbuttonfunc():
         def GDwindow():
             th = threading.Thread(target=compbuttonfunc.destroy)
@@ -115,4 +117,6 @@ def __init__():
 # ---------------------- M A I N   L O O P ---------------------------------- 
     root.mainloop()
 
+# ---------------------- I N A T I L I Z E ---------------------------------- 
 __init__()
+# ---------------------- E N D ----------------------------------

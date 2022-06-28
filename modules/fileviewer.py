@@ -1,106 +1,54 @@
-import linecache
-import os
-import ctypes
-import pathlib
-import random
-import threading
-import time
-import string
-import threading
 from tkinter import *
-from tkinter import filedialog, ttk
+from tkinter import ttk
+import time
 
-def FileWinodow(mainpath):
-    # Increase Dots Per inch so it looks sharper
-    ctypes.windll.shcore.SetProcessDpiAwareness(True)
+#count = 50
+#ongoingText = "Scanned "
+#Start = 'Start Scan'
+#End = 'Cancel Scan'
+#Time = 0.05
 
-    root = Tk()
-    # set a title for our file explorer main window
-    root.title('Compputing Notes')
-    root.geometry("575x450")
-    root.configure(background='#3a3a3a')
-    root.grid_columnconfigure(1, weight=1)
-    root.grid_rowconfigure(1, weight=1)
+def script(count, ongoingText, Start, End, Time):
+    gui=Tk()
+    gui.title('Scan Files')
+    gui.geometry('575x100')
+    gui.configure(background='#3a3a3a')
+
+    def StartProgress():
+        interival = 100 / count
+        gui.configure(background='#3a3a3a')
+        for i in range(count):
+            progress_var['value'] += interival
+            stringvar.set(progress_var['value'])
+            # get the value
+            label.config(text=ongoingText+stringvar.get()+' %', bg = '#3a3a3a', fg = 'white', font = ('Comic Code Ligatures Medium', 10))
+            # update value
+            gui.update_idletasks()
+            time.sleep(Time)
+        gui.destroy()
+
+    def StopProgress(ongoingText):
+        # stop progress
+        gui.configure(background='#3a3a3a')
+        progress_var.stop()
+        # set zero percent
+        stringvar.set('00.0 %')
+        label.config(text=ongoingText+stringvar.get(), bg = '#3a3a3a', fg = 'white', font = ('Comic Code Ligatures Medium', 10))
         
-    def pathChange(*event):
-        # Get all Files and Folders from the given Directory
-        directory = os.listdir(currentPath.get())
-        # Clearing the list
-        list.delete(0, END)
-        # Inserting the files and directories into the list
-        for file in directory:
-            list.insert(0, file)
 
-    def changePathByClick(event=None):
-        # Get clicked item.
-        picked = list.get(list.curselection()[0])
-        # get the complete path by joining the current path with the picked item
-        path = os.path.join(currentPath.get(), picked)
-        # Check if item is file, then open it
-        if os.path.isfile(path):
-            print('Opening: '+path)
-            os.startfile(path)
-        # Set new path, will trigger pathChange function.
-        else:
-            currentPath.set(path)
+    # create an instance of progress bar
 
+    progress_var=ttk.Progressbar(gui, orient="horizontal",
+                    length=400, mode="determinate")
+    progress_var.place(x=30,y=20)
+    # set the value of progress bar
+    stringvar=StringVar()
+    stringvar.set('00.0 %')
+    label=Label(gui,text=stringvar.get(), bg = '#3a3a3a', fg = 'white', font = ('Comic Code Ligatures Medium', 10))
+    label.place(x=440,y=17)
+    start_btn=Button(gui,text=Start,command=StartProgress, bg = '#5a5a5a', fg = 'white', font = ('Comic Code Ligatures Medium', 10))
+    start_btn.place(x=30,y=50)
+    gui.mainloop()
+    pass
 
-    def open_popup():
-        global top
-        top = Toplevel(root)
-        top.geometry("250x150")
-        top.resizable(False, False)
-        top.title("New File or Folder")
-        top.configure(background='#3a3a3a')
-        top.columnconfigure(0, weight=1)
-        Label(top, text='Enter File or Folder name',bg = '#3a3a3a', fg = 'white', font = ('Comic Code Ligatures Medium', 10)).grid()
-        Entry(top,bg = '#5a5a5a', fg = 'white', font = ('Comic Code Ligatures Medium', 10), textvariable=newFileName).grid(column=0, pady=10)
-        Button(top, text="Create", command=newFileOrFolder,bg = '#5a5a5a', fg = 'white', font = ('Comic Code Ligatures Medium', 10)).grid(pady=10)
-
-    def newFileOrFolder():
-        # check if it is a file name or a folder
-        if len(newFileName.get().split('.')) != 1:
-            open(os.path.join(currentPath.get(), newFileName.get()), 'w').close()
-        else:
-            os.mkdir(os.path.join(currentPath.get(), newFileName.get()))
-        # destroy the top
-        top.destroy()
-        pathChange()
-
-    top = ''
-
-    # String variables
-    newFileName = StringVar(root, "example.txt", 'new_name')
-    currentPath = StringVar(
-        root,
-        name='currentPath',
-        value=mainpath
-    )
-    # Bind changes in this variable to the pathChange function
-    currentPath.trace('w', pathChange)
-
-    Entry(root, textvariable=currentPath,bg = '#3a3a3a', fg = 'white', font = ('Comic Code Ligatures Medium', 10)).grid(sticky='NSEW', pady=10)
-    
-
-    # List of files and folder
-    list = Listbox(root,bg = '#3a3a3a', fg = 'white', font = ('Comic Code Ligatures Medium', 10))
-    list.grid(sticky='NSEW', column=0, row=1, ipady=10, ipadx=200)
-
-    # List Accelerators
-    list.bind('<Double-1>', changePathByClick)
-    list.bind('<Return>', changePathByClick)
-
-    # Menu
-    menubar = Menu(root, background='#3a3a3a', fg='white')
-    # Adding a new File button
-    menubar.add_command(label="Add File or Folder", command=open_popup)
-    # Adding a quit button to the Menubar
-    menubar.add_command(label="Quit", command=root.quit)
-    # Make the menubar the Main Menu
-    root.config(menu=menubar)
-
-    # Call the function so the list displays
-    pathChange('')
-    # run the main program
-    root.mainloop()
-    
+#script(count, ongoingText, Start, End, Time)
